@@ -4,8 +4,8 @@ import Comment from "../features/comments/Comment";
 import {
   fetchComments,
   commentsSelectors,
-  deleteComments,
   removeOneComment,
+  patchComment,
 } from "../store/slices/comments/commentsSlice";
 
 const Comments = () => {
@@ -16,14 +16,18 @@ const Comments = () => {
     return dispatch(removeOneComment(id));
   }, []);
 
+  const onPatch = useCallback((id, newObj) => {
+    return dispatch(patchComment({ id, newObj }));
+  }, []);
+
   useEffect(() => {
     dispatch(fetchComments());
   }, []);
 
   if (allComments.length < 1) return <div>There is no more data...</div>;
-  return allComments.map(comment => (
-    <div key={comment.id}>
-      <Comment comment={comment} onDelete={onDelete} />
+  return allComments.map(({ id, body }) => (
+    <div key={id}>
+      <Comment id={id} body={body} onDelete={onDelete} onPatch={onPatch} />
     </div>
   ));
 };

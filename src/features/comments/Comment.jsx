@@ -1,17 +1,19 @@
-import React from "react";
+import React, { memo } from "react";
 
-const Comments = ({ comment, onDelete }) => {
+const Comments = ({ id, body, onDelete, onPatch }) => {
   return (
     <div>
       <ul>
         <li>
-          {comment.id} {comment.body}
-          <button onClick={() => onDelete(comment.id)}>Delete</button>
-          <button>Update</button>
+          {id} {body}
+          <button onClick={() => onDelete(id)}>Delete</button>
+          <button onClick={() => onPatch(id, { body: "new text" })}>
+            Update
+          </button>
         </li>
       </ul>
     </div>
   );
 };
 
-export default Comments;
+export default memo(Comments);

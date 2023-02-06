@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Comments from "./components/Comments";
 import "rsuite/dist/rsuite.min.css";
 
