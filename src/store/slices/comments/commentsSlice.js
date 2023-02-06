@@ -17,6 +17,16 @@ export const fetchComments = createAsyncThunk(
   }
 );
 
+export const deleteComments = createAsyncThunk(
+  "comments/deleteComments",
+  async id => {
+    await fetch(`https://jsonplaceholder.typicode.com/comments/${id}`, {
+      method: "DELETE",
+    });
+    return id;
+  }
+);
+
 const commentsAdapter = createEntityAdapter({
   selectId: comment => comment.id, // the id our comments response has
 });
@@ -24,8 +34,13 @@ const commentsAdapter = createEntityAdapter({
 export const commentsSlice = createSlice({
   name: "comments",
   initialState: commentsAdapter.getInitialState(initialState),
-  reducers: {},
+  reducers: {
+    setAllComments: commentsAdapter.setAll,
+    removeOneComment: commentsAdapter.removeOne,
+    addManyComments: commentsAdapter.addMany,
+  },
   extraReducers: builder => {
+    // GET
     builder.addCase(fetchComments.pending, (state, { payload }) => {
       state.loading = true;
     });
@@ -36,14 +51,25 @@ export const commentsSlice = createSlice({
     builder.addCase(fetchComments.rejected, (state, { payload }) => {
       state.loading = false;
     });
+    // DELETE
+    builder.addCase(deleteComments.pending, (state, { payload }) => {
+      state.loading = true;
+    });
+    builder.addCase(deleteComments.fulfilled, (state, { payload: id }) => {
+      state.loading = false;
+      commentsAdapter.removeOne(state, id);
+    });
+    builder.addCase(deleteComments.rejected, (state, { payload }) => {
+      state.loading = false;
+    });
   },
 });
+
+export const { setAllComments, removeOneComment, addManyComments } =
+  commentsSlice.actions;
 
 export const commentsSelectors = commentsAdapter.getSelectors(
   state => state.comments
 );
-
-// export const { selectIds, selectById, selectEntities, selectAll, selectTotal } =
-//   commentsSelectors;
 
 export default commentsSlice.reducer;

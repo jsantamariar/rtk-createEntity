@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import Comments from "./components/Comments";
 import "rsuite/dist/rsuite.min.css";
-import Comments from "./features/comments/Comments";
 
 function App() {
   return (
