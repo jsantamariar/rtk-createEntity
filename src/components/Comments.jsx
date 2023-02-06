@@ -6,6 +6,7 @@ import {
   commentsSelectors,
   removeOneComment,
   patchComment,
+  deleteComments,
 } from "../store/slices/comments/commentsSlice";
 
 const Comments = () => {
@@ -13,7 +14,7 @@ const Comments = () => {
   const allComments = useSelector(commentsSelectors.selectAll);
 
   const onDelete = useCallback(id => {
-    return dispatch(removeOneComment(id));
+    return dispatch(deleteComments(id));
   }, []);
 
   const onPatch = useCallback((id, newObj) => {
@@ -25,6 +26,7 @@ const Comments = () => {
   }, []);
 
   if (allComments.length < 1) return <div>There is no more data...</div>;
+
   return allComments.map(({ id, body }) => (
     <div key={id}>
       <Comment id={id} body={body} onDelete={onDelete} onPatch={onPatch} />
